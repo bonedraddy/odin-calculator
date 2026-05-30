@@ -1,74 +1,77 @@
 const digitButton = document.querySelectorAll(".digit-btn");
 const operatorButton = document.querySelectorAll(".operator-btn");
+const negButton = document.getElementById("negate");
 const clearButton = document.getElementById("clear");
 const equalButton = document.getElementById("equal");
-const outputPara = document.querySelector(".output");
-const logPara = document.querySelector(".log");
+const output = document.querySelector(".output");
+const log = document.querySelector(".log");
+const history = document.querySelector(".history");
 
 const values = {
   current: "",
-  previous: "",
+  currentDisplay: "",
   num1: 0,
   num2: 0,
-  result: 0,
+  result: null,
   operator: "",
-};
-
-const calculatorState = {
-  intialState: true,
-  screenDisplay: "",
-  historyDisplay: "",
 };
 
 digitButton.forEach((button) => {
   button.addEventListener("click", () => {
     setCurrentValue(button.textContent);
-    updateDisplay();
-    console.log(`Current Value: ${values.current}`);
+    output.textContent = parseFloat(values.current).toLocaleString();
   });
 });
 
 operatorButton.forEach((button) => {
   button.addEventListener("click", () => {
-    updateValues(button.textContent);
-    updateDisplay();
-    console.log("Operator selected");
-    console.log(values);
-    console.log(calculatorState);
+    values.operator = button.textContent;
+    values.num1 = parseFloat(values.current);
+    output.textContent = "";
+    values.result === null
+      ? (log.textContent = values.num1.toLocaleString() + " " + values.operator)
+      : values.result.toLocaleString() + " " + values.operator;
+    values.current = "";
   });
 });
 
 clearButton.addEventListener("click", () => {
   clearCalculator();
-  updateDisplay();
   console.log("Values have been cleared.");
-  console.log(values);
-  console.log(calculatorState);
 });
 
 equalButton.addEventListener("click", () => {
-  console.log("Before:");
-  console.log(values);
   calculate();
-  console.log("After:");
+  output.textContent = values.result.toLocaleString();
+  log.textContent =
+    values.num1.toLocaleString() +
+    " " +
+    values.operator +
+    " " +
+    values.num2.toLocaleString() +
+    " =";
+  history.textContent =
+    values.num1.toLocaleString() +
+    " " +
+    values.operator +
+    " " +
+    values.num2.toLocaleString() +
+    " = " +
+    values.result.toLocaleString();
+});
+
+negButton.addEventListener("click", () => {
+  values.num1 = parseFloat(values.current) * -1;
+  values.current = values.num1.toString();
   console.log(values);
-  console.log(calculatorState);
-  logPara.textContent = calculatorState.screenDisplay;
-  outputPara.textContent = values.result;
 });
 
 //============
 //FUNCTIONS
 //============
-function updateDisplay() {
-  //outputPara.textContent = values.current === null ? "0" : values.current;
-  outputPara.textContent = values.current;
-  logPara.textContent = calculatorState.screenDisplay;
-}
-
 function setCurrentValue(value) {
   values.current += value;
-  outputPara.textContent = values.current;
+  values.currentDisplay = parseFloat(values.current).toLocaleString();
 }
 
 function updateValues(operator) {
@@ -80,14 +83,11 @@ function updateValues(operator) {
 
   values.current = "";
   values.operator = operator;
-  calculatorState.screenDisplay = values.num1 + " " + values.operator;
 }
 
 function calculate() {
   if (values.operator === "") return;
   values.num2 = parseFloat(values.current);
-  //const num1 = parseFloat(values.previousValue);
-  //const num2 = parseFloat(values.currentValue);
 
   switch (values.operator) {
     case "+":
@@ -105,21 +105,15 @@ function calculate() {
     default:
       return;
   }
-  calculatorState.screenDisplay =
-    values.num1 + " " + values.operator + " " + values.num2 + " =";
-  values.num1 = values.result;
-  values.num2 = 0;
   values.current = "";
 }
 
 function clearCalculator() {
   values.current = "";
-  values.previous = "";
   values.num1 = 0;
   values.num2 = 0;
   values.result = 0;
   values.operator = "";
-  Object.keys(calculatorState).forEach((key) => {
-    calculatorState[key] = "";
-  });
+  output.textContent = "";
+  log.textContent = "";
 }
