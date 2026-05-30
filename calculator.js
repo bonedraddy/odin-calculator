@@ -9,55 +9,73 @@ const history = document.querySelector(".history");
 
 const values = {
   current: "",
-  currentDisplay: "",
   num1: 0,
   num2: 0,
   result: null,
   operator: "",
 };
 
+const historyArray = [
+  "history slot 1", //h1
+  "history slot 2", //h2
+  "history slot 3", //h3
+  "history slot 4", //h4
+  "history slot 5", //h5
+  "history slot 6", //h6
+  "history slot 7", //h7
+  "history slot 8", //h8
+  "history slot 9", //h9
+  "history slot 10", //h10
+];
+
 digitButton.forEach((button) => {
   button.addEventListener("click", () => {
-    setCurrentValue(button.textContent);
+    values.current += button.textContent;
     output.textContent = parseFloat(values.current).toLocaleString();
   });
 });
 
 operatorButton.forEach((button) => {
   button.addEventListener("click", () => {
-    values.operator = button.textContent;
-    values.num1 = parseFloat(values.current);
-    output.textContent = "";
-    values.result === null
-      ? (log.textContent = values.num1.toLocaleString() + " " + values.operator)
-      : values.result.toLocaleString() + " " + values.operator;
+    const chosenOperator = button.textContent;
+
+    if (values.current === "" && values.result === null) return;
+
+    if (values.operator !== "" && values.current !== "") {
+      values.num2 = parseFloat(values.current);
+      calculate();
+      values.num1 = values.result;
+    } else if (values.current !== "") {
+      values.num1 = parseFloat(values.current);
+    } else if (values.result !== null) {
+      values.num1 = values.result;
+    }
+
+    values.operator = chosenOperator;
     values.current = "";
+
+    output.textContent = values.num1.toLocaleString();
+    log.textContent = `${values.num1.toLocaleString()} ${values.operator}`;
   });
+});
+
+equalButton.addEventListener("click", () => {
+  if (values.operator === "" || values.current === "") return;
+
+  values.num2 = parseFloat(values.current);
+  calculate();
+
+  log.textContent = `${values.num1.toLocaleString()} ${values.operator} ${values.num2.toLocaleString()}`;
+  output.textContent = values.result.toLocaleString();
+
+  values.num1 = values.result;
+  values.current = "";
+  values.operator = "";
 });
 
 clearButton.addEventListener("click", () => {
   clearCalculator();
   console.log("Values have been cleared.");
-});
-
-equalButton.addEventListener("click", () => {
-  calculate();
-  output.textContent = values.result.toLocaleString();
-  log.textContent =
-    values.num1.toLocaleString() +
-    " " +
-    values.operator +
-    " " +
-    values.num2.toLocaleString() +
-    " =";
-  history.textContent =
-    values.num1.toLocaleString() +
-    " " +
-    values.operator +
-    " " +
-    values.num2.toLocaleString() +
-    " = " +
-    values.result.toLocaleString();
 });
 
 negButton.addEventListener("click", () => {
@@ -69,25 +87,8 @@ negButton.addEventListener("click", () => {
 //============
 //FUNCTIONS
 //============
-function setCurrentValue(value) {
-  values.current += value;
-  values.currentDisplay = parseFloat(values.current).toLocaleString();
-}
-
-function updateValues(operator) {
-  if (values.num1 === 0) {
-    values.num1 = parseFloat(values.current);
-  } else {
-    values.num2 = values.current;
-  }
-
-  values.current = "";
-  values.operator = operator;
-}
-
 function calculate() {
   if (values.operator === "") return;
-  values.num2 = parseFloat(values.current);
 
   switch (values.operator) {
     case "+":
@@ -105,7 +106,6 @@ function calculate() {
     default:
       return;
   }
-  values.current = "";
 }
 
 function clearCalculator() {
