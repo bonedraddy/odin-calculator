@@ -16,18 +16,14 @@ const values = {
   operator: "",
 };
 
-const historyArray = [
-  "history slot 1", //h1
-  "history slot 2", //h2
-  "history slot 3", //h3
-  "history slot 4", //h4
-  "history slot 5", //h5
-  "history slot 6", //h6
-  "history slot 7", //h7
-  "history slot 8", //h8
-  "history slot 9", //h9
-  "history slot 10", //h10
-];
+const storedHistory = [];
+
+const valuesHistory = {
+  historyNum1: 0,
+  historyNum2: 0,
+  historyOperator: "",
+  historyResult: 0,
+};
 
 digitButton.forEach((button) => {
   button.addEventListener("click", () => {
@@ -73,18 +69,27 @@ equalButton.addEventListener("click", () => {
   values.num2 = parseFloat(values.current);
   calculate();
 
+  valuesHistory.historyNum1 = values.num1;
+  valuesHistory.historyNum2 = values.num2;
+  valuesHistory.historyOperator = values.operator;
+  valuesHistory.historyResult = values.result;
+
   log.textContent = `${values.num1.toLocaleString("en-US", {
     maximumFractionDigits: 20,
   })} ${values.operator} ${values.num2.toLocaleString("en-US", {
     maximumFractionDigits: 20,
   })}`;
+
   output.textContent = values.result.toLocaleString("en-US", {
     maximumFractionDigits: 20,
   });
 
+  updateHistory();
+
   values.num1 = values.result;
   values.current = "";
   values.operator = "";
+  console.log(storedHistory);
 });
 
 clearButton.addEventListener("click", () => {
@@ -146,4 +151,23 @@ function clearCalculator() {
   values.operator = "";
   output.textContent = "";
   log.textContent = "";
+}
+
+function updateHistory() {
+  storedHistory.unshift(
+    `${valuesHistory.historyNum1.toLocaleString("en-US", {
+      maximumFractionDigits: 20,
+    })} ${valuesHistory.historyOperator} ${valuesHistory.historyNum2.toLocaleString(
+      "en-US",
+      {
+        maximumFractionDigits: 20,
+      },
+    )} = ${valuesHistory.historyResult.toLocaleString("en-US", {
+      maximumFractionDigits: 20,
+    })}`,
+  );
+
+  if (storedHistory.length > 10) {
+    storedHistory.pop();
+  }
 }
