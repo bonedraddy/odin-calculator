@@ -1,5 +1,6 @@
 const digitButton = document.querySelectorAll(".digit-btn");
 const operatorButton = document.querySelectorAll(".operator-btn");
+const decimalButton = document.getElementById("decimal");
 const negButton = document.getElementById("negate");
 const clearButton = document.getElementById("clear");
 const equalButton = document.getElementById("equal");
@@ -82,6 +83,10 @@ negButton.addEventListener("click", () => {
   values.num1 = parseFloat(values.current) * -1;
   values.current = values.num1.toString();
   console.log(values);
+});
+
+decimalButton.addEventListener("click", () => {
+  values.current.includes(".") ? values.current : (values.current += ".");
 });
 
 //============
