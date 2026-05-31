@@ -32,7 +32,9 @@ const historyArray = [
 digitButton.forEach((button) => {
   button.addEventListener("click", () => {
     values.current += button.textContent;
-    output.textContent = parseFloat(values.current).toLocaleString();
+    output.textContent = parseFloat(values.current).toLocaleString("en-US", {
+      maximumFractionDigits: 20,
+    });
     console.log(values.current);
   });
 });
@@ -56,8 +58,12 @@ operatorButton.forEach((button) => {
     values.operator = chosenOperator;
     values.current = "";
 
-    output.textContent = values.num1.toLocaleString();
-    log.textContent = `${values.num1.toLocaleString()} ${values.operator}`;
+    output.textContent = values.num1.toLocaleString("en-US", {
+      maximumFractionDigits: 20,
+    });
+    log.textContent = `${values.num1.toLocaleString("en-US", {
+      maximumFractionDigits: 20,
+    })} ${values.operator}`;
   });
 });
 
@@ -67,8 +73,14 @@ equalButton.addEventListener("click", () => {
   values.num2 = parseFloat(values.current);
   calculate();
 
-  log.textContent = `${values.num1.toLocaleString()} ${values.operator} ${values.num2.toLocaleString()}`;
-  output.textContent = values.result.toLocaleString();
+  log.textContent = `${values.num1.toLocaleString("en-US", {
+    maximumFractionDigits: 20,
+  })} ${values.operator} ${values.num2.toLocaleString("en-US", {
+    maximumFractionDigits: 20,
+  })}`;
+  output.textContent = values.result.toLocaleString("en-US", {
+    maximumFractionDigits: 20,
+  });
 
   values.num1 = values.result;
   values.current = "";
@@ -83,10 +95,14 @@ clearButton.addEventListener("click", () => {
 negButton.addEventListener("click", () => {
   if (values.current !== "") {
     values.current = (parseFloat(values.current) * -1).toString();
-    output.textContent = Number(values.current).toLocaleString();
+    output.textContent = Number(values.current).toLocaleString("en-US", {
+      maximumFractionDigits: 20,
+    });
   } else if (values.result !== null) {
     values.result = values.result * -1;
-    output.textContent = values.result.toLocaleString();
+    output.textContent = values.result.toLocaleString("en-US", {
+      maximumFractionDigits: 20,
+    });
   }
 });
 
