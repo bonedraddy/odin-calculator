@@ -33,6 +33,7 @@ digitButton.forEach((button) => {
   button.addEventListener("click", () => {
     values.current += button.textContent;
     output.textContent = parseFloat(values.current).toLocaleString();
+    console.log(values.current);
   });
 });
 
@@ -80,13 +81,21 @@ clearButton.addEventListener("click", () => {
 });
 
 negButton.addEventListener("click", () => {
-  values.num1 = parseFloat(values.current) * -1;
-  values.current = values.num1.toString();
-  console.log(values);
+  if (values.current !== "") {
+    values.current = (parseFloat(values.current) * -1).toString();
+    output.textContent = Number(values.current).toLocaleString();
+  } else if (values.result !== null) {
+    values.result = values.result * -1;
+    output.textContent = values.result.toLocaleString();
+  }
 });
 
 decimalButton.addEventListener("click", () => {
-  values.current.includes(".") ? values.current : (values.current += ".");
+  if (values.current.includes(".")) {
+    return;
+  } else {
+    values.current += ".";
+  }
 });
 
 //============
