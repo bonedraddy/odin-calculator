@@ -7,7 +7,7 @@ const equalButton = document.getElementById("equal");
 const clearHistory = document.getElementById("clearHistory");
 const output = document.querySelector(".output");
 const log = document.querySelector(".log");
-const history = document.querySelector(".history");
+const historyDisplay = document.querySelector(".history");
 
 const values = {
   current: "",
@@ -86,6 +86,7 @@ equalButton.addEventListener("click", () => {
   });
 
   updateHistory();
+  historyOutput();
 
   values.num1 = values.result;
   values.current = "";
@@ -176,4 +177,8 @@ function updateHistory() {
   if (storedHistory.length > 10) {
     storedHistory.pop();
   }
+}
+
+function historyOutput() {
+  historyDisplay.textContent = storedHistory;
 }
