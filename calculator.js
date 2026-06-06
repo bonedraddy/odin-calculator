@@ -4,6 +4,7 @@ const decimalButton = document.getElementById("decimal");
 const negButton = document.getElementById("negate");
 const clearButton = document.getElementById("clear");
 const equalButton = document.getElementById("equal");
+const clearHistory = document.getElementById("clearHistory");
 const output = document.querySelector(".output");
 const log = document.querySelector(".log");
 const history = document.querySelector(".history");
@@ -119,6 +120,11 @@ decimalButton.addEventListener("click", () => {
   }
 });
 
+clearHistory.addEventListener("click", () => {
+  console.log("History cleared.");
+  storedHistory.length = 0;
+  console.log(storedHistory);
+});
 //============
 //FUNCTIONS
 //============
